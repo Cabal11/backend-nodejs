@@ -16,8 +16,9 @@ export const getSection = async (req, res) => {
     res.json(rows);
 
   } catch (error) {
+    console.log("Problema : " + error)
     return res.status(500).json({
-      message: "Algo salio mal",
+      message: "Algo salio mal" + error,
     });
   }
 };
