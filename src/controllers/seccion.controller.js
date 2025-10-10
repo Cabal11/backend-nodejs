@@ -32,10 +32,10 @@ export const getSection = async (req, res) => {
 
   } catch (error) {
 
-    console.log("Problema : " + error);
+    console.log("Problema en la solicitud: " + error);
 
     return res.status(500).json({
-      message: "Algo salio mal" + error,
+      message: "Problema con el servidor" + error,
     });
 
   }
