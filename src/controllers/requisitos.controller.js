@@ -13,10 +13,10 @@ const cache = new NodeCache({ stdTTL: 60, checkperiod: 60 });
 export const getTipoRequisitos = async (req, res) => {
   try {
     //id que pasa por el API
-    const { id } = req.params;
+    // const { id } = req.params;
 
     //Si existen datos en cache los devuelve
-    const cacheData = cache.get(id);
+    const cacheData = cache.get('requisitos');
 
     // console.clear()
     // console.log("Datos en cache: ", cache.get(id));
@@ -31,12 +31,9 @@ export const getTipoRequisitos = async (req, res) => {
     //Sentencia SQL
     //Trae los datos
     const [rows] = await pool.query(
-      "Select requisito from tipo_requisito_requisitos tr \n" +
+      "Select tipo, requisito from tipo_requisito_requisitos tr \n" +
         "join tipo_requisito t on tr.id_tipo = t.id_tipo \n" +
-        "join requisitos req on tr.id_requisito = req.id_requisito \n" +
-        "where tr.id_tipo = ?",
-      [id]
-    );
+        "join requisitos req on tr.id_requisito = req.id_requisito");
 
     if (rows.length == 0) {
       return res.status(204).json({
@@ -45,7 +42,7 @@ export const getTipoRequisitos = async (req, res) => {
     }
 
     //Almacenar en cache
-    cache.set(id, rows);
+    cache.set('requisitos', rows);
 
     //Muestra los datos encontrados
     res.json(rows);
