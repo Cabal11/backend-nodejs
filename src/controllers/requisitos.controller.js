@@ -2,7 +2,7 @@ import { pool } from "../DB.js";
 import NodeCache from "node-cache";
 
 //cache en memoria
-const cache = new NodeCache({ stdTTL: 60, checkperiod: 60 });
+const cache = new NodeCache({ stdTTL: 540, checkperiod: 540 });
 
 //Mostrar los requisitos segun el tipo de requisito
 //1- Matrícula primer ingreso
