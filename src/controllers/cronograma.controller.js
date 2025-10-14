@@ -15,12 +15,11 @@ export const getCronogramas = async (req, res) => {
 
       return res.json(cacheData);
     }
-
     //Sentencia SQL
     //Trae los datos
     const [rows] = await pool.query(
-      "select tipo_proceso, DATE_FORMAT(fecha_inicio, '%d/%m/%Y') AS fecha_inicio, \n" +
-        "DATE_FORMAT(fecha_fin, '%d/%m/%Y') AS fecha_fin, \n" +
+      "select tipo_proceso, DATE_FORMAT(fecha_inicio, '%Y-%m-%d') AS fecha_inicio, \n" +
+        "DATE_FORMAT(fecha_fin, '%Y-%m-%d') AS fecha_fin, \n" +
         "time_format(hora_inicio, '%r') as hora_inicio, time_format(hora_fin, '%r') as hora_fin \n" +
         "from cronograma_matricula c join proceso_matricula m on c.id_proceso = m.id_tipo \n" +
         "join fechas f on c.id_fecha = f.id_fecha \n" +
