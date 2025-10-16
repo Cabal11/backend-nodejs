@@ -15,11 +15,6 @@ app.use(cors({
   credentials: true,
   methods: 'GET'
 }))
-// app.use(cors({
-//origin: 'url',
-//credentials: true,
-//methods: GET
-// }))
 
 app.use("/api", seccionRoutes);
 app.use("/api", requisitosRoute);

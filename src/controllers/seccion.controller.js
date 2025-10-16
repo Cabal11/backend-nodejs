@@ -18,7 +18,7 @@ export const getSection = async (req, res) => {
     //Sentencia SQL
     const query =
       "SELECT nombre_seccion, informacion, imagenURL \n" +
-      "FROM secciones s JOIN colegio.informacion i ON s.id_seccion = i.id_informacion \n" +
+      "FROM secciones s JOIN railway.informacion i ON s.id_seccion = i.id_informacion \n" +
       "JOIN imagenes img ON s.id_seccion = img.id_imagen";
 
     //Trae los datos
@@ -28,13 +28,13 @@ export const getSection = async (req, res) => {
       return res.status(204).json({
         message: "No content",
       });
-    } else {
-      //Almacenar en cache
-      cache.set("secciones", rows);
-
-      //Muestra los datos encontrados
-      res.json(rows);
     }
+    
+    //Almacenar en cache
+    cache.set("secciones", rows);
+
+    //Muestra los datos encontrados
+    res.json(rows);
   } catch (error) {
     console.log("Problema en la solicitud: " + error);
 
