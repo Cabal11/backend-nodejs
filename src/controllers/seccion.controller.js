@@ -7,6 +7,7 @@ const cache = new NodeCache({ stdTTL: 540, checkperiod: 540 });
 //Mostrar todas las secciones con su informacion y datos de imagen
 export const getSection = async (req, res) => {
   try {
+
     //Si existen datos en cache los devuelve
     const cacheData = cache.get("secciones");
 
@@ -18,7 +19,7 @@ export const getSection = async (req, res) => {
     //Sentencia SQL
     const query =
       "SELECT nombre_seccion, informacion, imagenURL \n" +
-      "FROM secciones s JOIN railway.informacion i ON s.id_seccion = i.id_informacion \n" +
+      "FROM secciones s JOIN colegio.informacion i ON s.id_seccion = i.id_informacion \n" +
       "JOIN imagenes img ON s.id_seccion = img.id_imagen";
 
     //Trae los datos

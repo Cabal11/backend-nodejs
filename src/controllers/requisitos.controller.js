@@ -16,7 +16,7 @@ export const getTipoRequisitos = async (req, res) => {
     // const { id } = req.params;
 
     //Si existen datos en cache los devuelve
-    const cacheData = cache.get('requisitos');
+    const cacheData = cache.get("requisitos");
 
     // console.clear()
     // console.log("Datos en cache: ", cache.get(id));
@@ -33,16 +33,17 @@ export const getTipoRequisitos = async (req, res) => {
     const [rows] = await pool.query(
       "Select tipo, requisito from tipo_requisito_requisitos tr \n" +
         "join tipo_requisito t on tr.id_tipo = t.id_tipo \n" +
-        "join requisitos req on tr.id_requisito = req.id_requisito");
+        "join requisitos req on tr.id_requisito = req.id_requisito"
+    );
 
     if (rows.length == 0) {
       return res.status(204).json({
-        message: "No content"
+        message: "No content",
       });
     }
 
     //Almacenar en cache
-    cache.set('requisitos', rows);
+    cache.set("requisitos", rows);
 
     //Muestra los datos encontrados
     res.json(rows);
