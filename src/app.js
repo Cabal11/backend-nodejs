@@ -7,6 +7,7 @@ import requisitosRoute from "./routes/requisitos.routes.js";
 import cronogramaRoute from "./routes/cronograma.routes.js";
 import validarToken from "./controllers/Auth/verificarToken.js";
 import { JWT_SECRET } from "./config.js";
+import { pool } from "./DB.js";
 
 const app = express();
 
@@ -47,16 +48,17 @@ app.post("/getToken", (req, res) => {
 
     res.json({ auth: true });
   } catch (error) {
-    res.status(500).json(`Fallo el servidor ${error}`);
+    res.status(500).send(`Fallo el servidor ${error.message}`);
   }
 });
 
 //Ping para iniciar el servidor
 app.use("/ping", async (req, res) => {
   try {
-    res.status(200).json("ping");
+    await pool.query("Select 1");
+    res.status(200).send("Servidor y DB, activos");
   } catch (error) {
-    res.status(500).json("Servidor en reposo");
+    res.status(500).send("Servidor o DB en reposo", error.message);
   }
 });
 
