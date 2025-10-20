@@ -42,7 +42,7 @@ app.post("/getToken", (req, res) => {
       secure: true,
       sameSite: "none",
       path: "/",
-      maxAge: 60 * 60 * 1,
+      maxAge: 60 * 60 * 1000,
     });
 
     res.json({ auth: true });

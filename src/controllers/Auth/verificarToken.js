@@ -6,7 +6,6 @@ function verificarToken(req, res, next) {
     //Obtener el token
     const token = req.cookies.token;
 
-
     //validar si tiene el token o no
     if (!token) {
       return res.status(401).json({
@@ -20,7 +19,7 @@ function verificarToken(req, res, next) {
 
     //Comprobar si es el mismo
     if (decode.name !== NAME_KEY) {
-      console.log(decode)
+      console.log(decode);
       return res.status(401).json({
         auth: false,
         message: "No permitido",
@@ -30,7 +29,7 @@ function verificarToken(req, res, next) {
     next();
   } catch (error) {
     //Por si esta alterado el token
-    return res.status(500).json("Token invalido");
+    return res.status(401).json("Token invalido o expirado");
   }
 }
 
