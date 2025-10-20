@@ -5,6 +5,7 @@ function verificarToken(req, res, next) {
   try {
     //Obtener el token
     const token = req.cookies.token;
+    console.log(token)
 
     //validar si tiene el token o no
     if (!token) {
