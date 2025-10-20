@@ -1,21 +1,24 @@
 import express from "express";
 import cors from "cors";
 import jwt from "jsonwebtoken";
+import cookieParser from "cookie-parser";
 import seccionRoutes from "./routes/seccion.routes.js";
 import requisitosRoute from "./routes/requisitos.routes.js";
 import cronogramaRoute from "./routes/cronograma.routes.js";
 import validarToken from "./controllers/Auth/verificarToken.js";
-import { JWT_SECRET, NAME_KEY } from "./config.js";
+import { JWT_SECRET } from "./config.js";
 
 const app = express();
+
+app.use(cookieParser());
 
 //Recibir los datos y convertilos en json
 app.use(express.json());
 app.use(
   cors({
-    origin: ["http://localhost:3001"],
+    origin: ["https://liceonosaradev.netlify.app"],
     credentials: true,
-    methods: "GET",
+    methods: ["GET", "POST"],
   })
 );
 
@@ -24,25 +27,27 @@ app.use("/api", validarToken, requisitosRoute);
 app.use("/api", validarToken, cronogramaRoute);
 
 //JSON Web token
-app.get("/getToken", (req, res) => {
+app.post("/getToken", (req, res) => {
   try {
     //Crear la firma
-    const token = jwt.sign({ name: NAME_KEY }, JWT_SECRET, {
-      expiresIn: 60 * 60 * 24,
+    const { name } = req.body;
+
+    const token = jwt.sign({ name: name }, JWT_SECRET, {
+      expiresIn: 60 * 20,
     });
-    console.log(NAME_KEY);
-    res.json({ auth: true, token: token });
+
+    //Enviar la cookie con el token
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      path: "/",
+      maxAge: 60 * 60 * 1,
+    });
+
+    res.json({ auth: true });
   } catch (error) {
     res.status(500).json(`Fallo el servidor ${error}`);
-  }
-});
-
-//prueba
-app.use("/prueba", validarToken, (req, res) => {
-  try {
-    res.status(200).json("prueba");
-  } catch (error) {
-    res.status(500).json("Fallo el servidor");
   }
 });
 
