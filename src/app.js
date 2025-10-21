@@ -16,7 +16,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: ["https://liceonosaradev.netlify.app", "http://localhost:3001"],
+    origin: ["https://liceonosaradev.netlify.app"],
     credentials: true,
     methods: ["GET", "POST"],
   })
