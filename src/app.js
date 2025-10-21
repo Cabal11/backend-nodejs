@@ -59,7 +59,8 @@ app.use("/ping", async (req, res) => {
   }
 });
 
-app.get("/verificar", (res, req) => {
+app.get("/verificar", (req, res) => {
+  //algo sucede con token
   const token = req.cookies.token;
   try {
     if (!token) {
