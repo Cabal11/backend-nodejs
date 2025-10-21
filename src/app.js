@@ -1,12 +1,11 @@
 import express from "express";
 import cors from "cors";
-import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import seccionRoutes from "./routes/seccion.routes.js";
 import requisitosRoute from "./routes/requisitos.routes.js";
 import cronogramaRoute from "./routes/cronograma.routes.js";
 import validarToken from "./controllers/Auth/verificarToken.js";
-import { JWT_SECRET } from "./config.js";
+import generarJWT from "./controllers/Auth/generarJWT.js";
 import { pool } from "./DB.js";
 
 const app = express();
@@ -17,7 +16,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: ["https://liceonosaradev.netlify.app"],
+    origin: ["https://liceonosaradev.netlify.app", "http://localhost:3001"],
     credentials: true,
     methods: ["GET", "POST"],
   })
@@ -32,10 +31,7 @@ app.post("/getToken", (req, res) => {
   try {
     //Crear la firma
     const { name } = req.body;
-
-    const token = jwt.sign({ name: name }, JWT_SECRET, {
-      expiresIn: 60 * 20,
-    });
+    const token = generarJWT(name);
 
     //Enviar la cookie con el token
     res.cookie("token", token, {
@@ -46,7 +42,8 @@ app.post("/getToken", (req, res) => {
       maxAge: 60 * 60 * 1000,
     });
 
-    res.json({ auth: true });
+    //Token para IOS en headers
+    res.json({ token: token });
   } catch (error) {
     res.status(500).send(`Fallo el servidor ${error.message}`);
   }

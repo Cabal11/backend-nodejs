@@ -4,10 +4,19 @@ import { NAME_KEY, JWT_SECRET } from "../../config.js";
 function verificarToken(req, res, next) {
   try {
     //Obtener el token
-    const token = req.cookies.token;
-    console.log(token)
+    let token = req.cookies?.token;
 
-    //validar si tiene el token o no
+    //Validar si esta en la cookie
+    if (!token) {
+      const headerAuth = req.headers["authorization"];
+      
+      //Validar si esta en el header
+      if (headerAuth && headerAuth.startsWith("Bearer ")) {
+        token = headerAuth.substring(7);
+      }
+    }
+
+    //Validar si tiene el token o no
     if (!token) {
       return res.status(401).json({
         auth: false,
