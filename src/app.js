@@ -6,7 +6,7 @@ import requisitosRoute from "./routes/requisitos.routes.js";
 import cronogramaRoute from "./routes/cronograma.routes.js";
 import GenerarToken from "./controllers/Auth/generarJWT.js";
 import { pool } from "./DB.js";
-import verificarToken from "./controllers/Auth/verificarToken.js";
+import VerificarToken from "./controllers/Auth/verificarToken.js";
 
 const app = express();
 
@@ -22,15 +22,15 @@ app.use(
   })
 );
 
-app.use("/api", verificarToken, seccionRoutes);
-app.use("/api", verificarToken, requisitosRoute);
-app.use("/api", verificarToken, cronogramaRoute);
+app.use("/api", VerificarToken, seccionRoutes);
+app.use("/api", VerificarToken, requisitosRoute);
+app.use("/api", VerificarToken, cronogramaRoute);
 
 //JSON Web token
 app.post("/getToken", (req, res) => {
   try {
     //Crear la firma
-    
+
     const token = GenerarToken(req.body);
 
     //Enviar la cookie con el token
@@ -61,10 +61,14 @@ app.use("/ping", async (req, res) => {
 
 app.get("/verificar", (res, req) => {
   const token = req.cookies.token;
-  if (!token) {
-    return res.status(401).json({ message: "Sin cookie" });
+  try {
+    if (!token) {
+      return res.status(401).json({ message: "Sin cookie" });
+    }
+    res.json({ message: "si hay cookie" });
+  } catch (error) {
+    res.status(500).send("Servidor o DB en reposo", error.message);
   }
-  res.json({ message: "si hay cookie" });
 });
 
 // Si ingresan la ruta incorrecta o que no existe
