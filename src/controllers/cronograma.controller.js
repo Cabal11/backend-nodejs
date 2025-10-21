@@ -38,10 +38,10 @@ export const getCronogramas = async (req, res) => {
     //Muestra los datos encontrados
     res.json(rows);
   } catch (error) {
-    console.log("Problema en la solicitud: " + error);
+    console.log("Problema en la solicitud a la BD: " + error);
 
     return res.status(500).json({
-      message: "Problema en el servidor" + error,
+      message: "Problema con la BD" + error,
     });
   }
 };

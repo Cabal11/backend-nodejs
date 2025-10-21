@@ -5,8 +5,8 @@ import seccionRoutes from "./routes/seccion.routes.js";
 import requisitosRoute from "./routes/requisitos.routes.js";
 import cronogramaRoute from "./routes/cronograma.routes.js";
 import GenerarToken from "./controllers/Auth/generarJWT.js";
-import { pool } from "./DB.js";
 import VerificarToken from "./controllers/Auth/verificarToken.js";
+import { pool } from "./DB.js";
 
 const app = express();
 
@@ -60,9 +60,10 @@ app.use("/ping", async (req, res) => {
 });
 
 app.get("/verificar", (req, res) => {
-  //algo sucede con token
+  //Extraer cookie
   const token = req.cookies.token;
   try {
+    //Validar si hay un token en la cookie
     if (!token) {
       return res.status(401).json({ message: "Sin cookie" });
     }
