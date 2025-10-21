@@ -1,18 +1,20 @@
 import jwt from "jsonwebtoken";
 import { NAME_KEY, JWT_SECRET } from "../../config.js";
 
-function verificarToken(req, res, next) {
+function VerificarToken(req, res, next) {
   try {
     //Obtener el token
     let token = req.cookies?.token;
+    console.log("token en cookie", token);
 
     //Validar si esta en la cookie
     if (!token) {
       const headerAuth = req.headers["authorization"];
-      
+
       //Validar si esta en el header
       if (headerAuth && headerAuth.startsWith("Bearer ")) {
         token = headerAuth.substring(7);
+        console.log("token en header", token);
       }
     }
 
@@ -43,4 +45,4 @@ function verificarToken(req, res, next) {
   }
 }
 
-export default verificarToken;
+export default VerificarToken;

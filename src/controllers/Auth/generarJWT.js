@@ -1,10 +1,13 @@
-import { JWT_SECRET } from "./config.js";
+import { JWT_SECRET } from "../../config.js";
 import jwt from "jsonwebtoken";
 
-function generarToken(params) {
-  const token = jwt.sign({ name: params }, JWT_SECRET, {
+function GenerarToken(body) {
+  const name = body.name;
+  const token = jwt.sign({ name: name }, JWT_SECRET, {
     expiresIn: 60 * 20,
   });
 
   return token;
 }
+
+export default GenerarToken;
