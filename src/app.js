@@ -16,7 +16,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: ["https://liceonosaradev.netlify.app"],
+    origin: ["https://liceonosaradev.netlify.app", "https://liceonosaradev.vercel.app/"],
     credentials: true,
     methods: ["GET", "POST"],
   })
