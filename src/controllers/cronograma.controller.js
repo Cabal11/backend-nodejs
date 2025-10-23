@@ -1,7 +1,7 @@
 import { pool } from "../DB.js";
 import NodeCache from "node-cache";
 
-//declara cache en memoria
+//Declara variable cache y su constructor
 const cache = new NodeCache({ stdTTL: 540, checkperiod: 540 });
 
 export const getCronogramas = async (req, res) => {
@@ -10,13 +10,10 @@ export const getCronogramas = async (req, res) => {
     const cacheData = cache.get("cronograma");
 
     if (cacheData) {
-      //     console.clear()
-    //   console.log("Datos desde cache: ", cache.get("cronograma"));
-
       return res.json(cacheData);
     }
     //Sentencia SQL
-    //Trae los datos
+    //Trae los datos y la fecha en formato YYYY-MM-DD
     const [rows] = await pool.query(
       "select tipo_proceso, DATE_FORMAT(fecha_inicio, '%Y-%m-%d') AS fecha_inicio, \n" +
         "DATE_FORMAT(fecha_fin, '%Y-%m-%d') AS fecha_fin, \n" +
@@ -26,6 +23,7 @@ export const getCronogramas = async (req, res) => {
         "join horarios h on c.id_horario = h.id_horario"
     );
 
+    //Devuelve 204 si esta vacio
     if (rows.length == 0) {
       return res.status(204).json({
         message: "No content",

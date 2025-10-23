@@ -14,23 +14,25 @@ app.use(cookieParser());
 
 //Recibir los datos y convertilos en json
 app.use(express.json());
+
+//Permitir que solicite a la API un unico dominio 
 app.use(
   cors({
-    origin: ["https://liceonosaradev.netlify.app", "https://liceonosaradev.vercel.app"],
+    origin: ["https://colegio-nosara.vercel.app"],
     credentials: true,
     methods: ["GET", "POST"],
   })
 );
 
+//APIs para enviar la informacion y validar si tiene token
 app.use("/api", VerificarToken, seccionRoutes);
 app.use("/api", VerificarToken, requisitosRoute);
 app.use("/api", VerificarToken, cronogramaRoute);
 
-//JSON Web token
+//Enviar JSON Web token
 app.post("/getToken", (req, res) => {
   try {
-    //Crear la firma
-
+    //Crear el token
     const token = GenerarToken(req.body);
 
     //Enviar la cookie con el token
@@ -42,20 +44,20 @@ app.post("/getToken", (req, res) => {
       maxAge: 60 * 60 * 1000,
     });
 
-    //Token para IOS en headers
+    //Token para IOS guardar en headers
     res.json({ token: token });
   } catch (error) {
     res.status(500).send(`Fallo el servidor ${error.message}`);
   }
 });
 
-//Ping para iniciar el servidor
+//Ping para iniciar el servidor y BD
 app.use("/ping", async (req, res) => {
   try {
     await pool.query("Select 1");
     res.status(200).send("Servidor y DB, activos");
   } catch (error) {
-    res.status(500).send("Servidor o DB en reposo", error.message);
+    res.status(500).send("Servidor y DB en reposo", error.message);
   }
 });
 

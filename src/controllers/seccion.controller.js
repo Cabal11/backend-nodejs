@@ -7,12 +7,11 @@ const cache = new NodeCache({ stdTTL: 540, checkperiod: 540 });
 //Mostrar todas las secciones con su informacion y datos de imagen
 export const getSection = async (req, res) => {
   try {
-
     //Si existen datos en cache los devuelve
     const cacheData = cache.get("secciones");
 
     if (cacheData) {
-      console.log("Datos desde cache");
+      //Devuelve los datos cacheados
       return res.json(cacheData);
     }
 
@@ -25,12 +24,13 @@ export const getSection = async (req, res) => {
     //Trae los datos
     const [rows] = await pool.query(query);
 
+    //Si esta vacio devuelve un 204
     if (rows.length == 0) {
       return res.status(204).json({
         message: "No content",
       });
     }
-    
+
     //Almacenar en cache
     cache.set("secciones", rows);
 

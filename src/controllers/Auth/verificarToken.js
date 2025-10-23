@@ -11,7 +11,7 @@ function VerificarToken(req, res, next) {
     if (!token) {
       const headerAuth = req.headers["authorization"];
 
-      //Validar si esta en el header
+      //Validar si esta en el header y si es correcto el formato
       if (headerAuth && headerAuth.startsWith("Bearer ")) {
         token = headerAuth.substring(7);
         console.log("token en header", token);

@@ -4,27 +4,13 @@ import NodeCache from "node-cache";
 //cache en memoria
 const cache = new NodeCache({ stdTTL: 540, checkperiod: 540 });
 
-//Mostrar los requisitos segun el tipo de requisito
-//1- Matrícula primer ingreso
-// 2- Ratificación de matrícula
-// 3- Uniforme señoritas
-// 4- Uniforme caballeros
-
 export const getTipoRequisitos = async (req, res) => {
   try {
-    //id que pasa por el API
-    // const { id } = req.params;
-
     //Si existen datos en cache los devuelve
     const cacheData = cache.get("requisitos");
 
-    // console.clear()
-    // console.log("Datos en cache: ", cache.get(id));
-
     if (cacheData) {
-      //     console.clear()
-      //   console.log("Datos desde cache");
-
+      //Devuelve los datos cacheados
       return res.json(cacheData);
     }
 
@@ -36,6 +22,7 @@ export const getTipoRequisitos = async (req, res) => {
         "join requisitos req on tr.id_requisito = req.id_requisito"
     );
 
+    //Devuelve un 204 si esta vacio
     if (rows.length == 0) {
       return res.status(204).json({
         message: "No content",
